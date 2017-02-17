@@ -13,6 +13,8 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
+import me.khrystal.library.R;
+
 
 public class CircleRecyclerView extends RecyclerView implements View.OnClickListener {
 
@@ -82,8 +84,11 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
 //        scrollToPosition(7);
     }
 
+    private int mScrollPosition = -1;
+
     @Override
     public void scrollToPosition(int position) {
+        mScrollPosition = position;
         super.scrollToPosition(position);
         if(mOnCenterScrollListener != null){
             mOnCenterScrollListener.onCenterScroll(mCurrentCenterChildView);
@@ -173,6 +178,17 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
     }
 
     public View findViewAtCenter() {
+        if(mScrollPosition != -1) {
+            for (int i = 0; i < getChildCount(); i++) {
+                View view = getChildAt(i);
+                int tag = (int) view.getTag(R.id.tag_position);
+                if (tag == mScrollPosition){
+                    mScrollPosition = -1;
+                    return view;
+                }
+            }
+        }
+        mScrollPosition = -1;
         if (getLayoutManager().canScrollVertically()) {
             return findViewAt(0, getHeight() / 2);
         }else if (getLayoutManager().canScrollHorizontally()) {

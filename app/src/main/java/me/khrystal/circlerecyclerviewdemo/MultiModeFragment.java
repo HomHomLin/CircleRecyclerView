@@ -114,7 +114,10 @@ public class MultiModeFragment extends Fragment{
         mCircleRecyclerView.setOnCenterItemClickListener(new CircleRecyclerView.OnCenterItemClickListener() {
             @Override
             public void onCenterItemClick(View v) {
-                Toast.makeText(getContext(), "Center Clicked", Toast.LENGTH_SHORT).show();
+                TextView tv = (TextView) v.findViewById(R.id.item_text);
+                int i = Integer.valueOf(tv.getText().toString()) + 1;
+                mCircleRecyclerView.scrollToPosition(i);
+                Toast.makeText(getContext(), "Center Clicked :" + i, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -160,7 +163,8 @@ public class MultiModeFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(VH holder, final int position) {
-            holder.tv.setText("Number :" + position);
+            holder.tv.setText(String.valueOf(position));
+            holder.itemView.setTag(R.id.tag_position, position);
             Glide.with(getContext())
                     .load(mImgList.get(position))
                     .bitmapTransform(new CropCircleTransformation(getContext()))
