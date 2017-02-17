@@ -5,13 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-/**
- * usage:
- * author: kHRYSTAL
- * create time: 16/9/15
- * update time:
- * email: 723526676@qq.com
- */
 public class RotateYScaleXViewMode implements ItemViewMode {
 
     private float mScaleRatio = 0.001f;

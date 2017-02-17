@@ -4,13 +4,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-/**
- * usage:
- * author: kHRYSTAL
- * create time: 16/9/14
- * update time:
- * email: 723526676@qq.com
- */
 public class CircularViewMode implements ItemViewMode {
 
     private int mCircleOffset = 500;

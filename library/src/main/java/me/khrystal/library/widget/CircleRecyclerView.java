@@ -14,13 +14,6 @@ import android.view.View;
 import java.lang.ref.WeakReference;
 
 
-/**
- * usage:
- * author: kHRYSTAL
- * create time: 16/9/14
- * update time:
- * email: 723526676@qq.com
- */
 public class CircleRecyclerView extends RecyclerView implements View.OnClickListener {
 
     private static final int DEFAULT_SELECTION = Integer.MAX_VALUE >> 1;
@@ -33,6 +26,7 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
     private OnCenterItemClickListener mCenterItemClickListener;
     private View mCurrentCenterChildView;
     private OnScrollListener mOnScrollListener;
+    private OnCenterScrollListener mOnCenterScrollListener;
     private boolean mFirstOnLayout;
     private boolean mFirstSetAdapter = true;
 
@@ -85,6 +79,15 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
 
         if (mCurrentCenterChildView != null)
             mCurrentCenterChildView.setOnClickListener(this);
+//        scrollToPosition(7);
+    }
+
+    @Override
+    public void scrollToPosition(int position) {
+        super.scrollToPosition(position);
+        if(mOnCenterScrollListener != null){
+            mOnCenterScrollListener.onCenterScroll(mCurrentCenterChildView);
+        }
     }
 
     @Override
@@ -195,6 +198,9 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
         @Override
         public void run() {
             smoothScrollToView(mView.get());
+            if(mOnCenterScrollListener != null){
+                mOnCenterScrollListener.onCenterScroll(mView.get());
+            }
             if (mNeedCenterForce)
                 mIsForceCentering = true;
         }
@@ -232,6 +238,10 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
         mOnScrollListener = listener;
     }
 
+    public void setOnCenterScrollListener(OnCenterScrollListener listener){
+        mOnCenterScrollListener = listener;
+    }
+
     public interface OnCenterItemClickListener {
         void onCenterItemClick(View v);
     }
@@ -240,6 +250,10 @@ public class CircleRecyclerView extends RecyclerView implements View.OnClickList
         void onScrollChanged(int l, int t, int oldl, int oldt);
         void onScrollStateChanged(int state);
         void onScrolled(int dx, int dy);
+    }
+
+    public interface OnCenterScrollListener{
+        void onCenterScroll(View view);
     }
 
     @Override

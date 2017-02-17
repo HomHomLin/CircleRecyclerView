@@ -44,7 +44,7 @@ public class MultiModeFragment extends Fragment{
     private ItemViewMode mItemViewMode;
     private LinearLayoutManager mLayoutManager;
     private List<Integer> mImgList;
-    private boolean mIsNotLoop;
+    private boolean mIsNotLoop = true;
 
     private Integer[] mImgs = {
             R.drawable.img_1, R.drawable.img_2, R.drawable.img_3, R.drawable.img_4,
@@ -97,7 +97,7 @@ public class MultiModeFragment extends Fragment{
             case 6:
                 mItemViewMode = new CircularViewMode();
                 mLayoutManager = new LinearLayoutManager(getContext());
-                mIsNotLoop = true;
+//                mIsNotLoop = true;
                 break;
             case 7:
                 mItemViewMode = new CircularHorizontalMode();
@@ -109,12 +109,22 @@ public class MultiModeFragment extends Fragment{
         mCircleRecyclerView.setLayoutManager(mLayoutManager);
         mCircleRecyclerView.setViewMode(mItemViewMode);
         mCircleRecyclerView.setNeedCenterForce(true);
-        mCircleRecyclerView.setNeedLoop(!mIsNotLoop);
+        mCircleRecyclerView.setNeedLoop(false);
 
         mCircleRecyclerView.setOnCenterItemClickListener(new CircleRecyclerView.OnCenterItemClickListener() {
             @Override
             public void onCenterItemClick(View v) {
                 Toast.makeText(getContext(), "Center Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mCircleRecyclerView.setOnCenterScrollListener(new CircleRecyclerView.OnCenterScrollListener() {
+            @Override
+            public void onCenterScroll(View view) {
+                if(view != null) {
+                    TextView tv = (TextView) view.findViewById(R.id.item_text);
+                    Toast.makeText(getContext(), tv.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -124,6 +134,7 @@ public class MultiModeFragment extends Fragment{
         Collections.shuffle(mImgList);
 
         mCircleRecyclerView.setAdapter(new A());
+        mCircleRecyclerView.scrollToPosition(8);
 
     }
 
@@ -148,12 +159,19 @@ public class MultiModeFragment extends Fragment{
         }
 
         @Override
-        public void onBindViewHolder(VH holder, int position) {
-            holder.tv.setText("Number :" + (position % mImgList.size()));
+        public void onBindViewHolder(VH holder, final int position) {
+            holder.tv.setText("Number :" + position);
             Glide.with(getContext())
-                    .load(mImgList.get(position % mImgList.size()))
+                    .load(mImgList.get(position))
                     .bitmapTransform(new CropCircleTransformation(getContext()))
                     .into(holder.iv);
+            holder.iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    mLayoutManager.scrollToPositionWithOffset(position, 0);
+                    mCircleRecyclerView.scrollToPosition(position);
+                }
+            });
 
         }
 

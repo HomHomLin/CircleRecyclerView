@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MultiModeFragment fragment = MultiModeFragment.newInstance(ModeType.TYPE_CIRCLE);
+        MultiModeFragment fragment = MultiModeFragment.newInstance(ModeType.TYPE_SCALEX);
         fragmentTransaction.add(R.id.fragment_container, fragment);
         fragmentTransaction.commitAllowingStateLoss();
 
